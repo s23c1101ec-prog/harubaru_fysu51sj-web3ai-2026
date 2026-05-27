@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Priority Scheduler - タスク優先度・予定調整</title>
+    <!-- Google Fonts: Outfit (モダンで洗練されたフォント) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- ヘッダー -->
+        <header class="app-header">
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <i data-lucide="sparkles"></i>
+                </div>
+                <div>
+                    <h1>Priority Scheduler</h1>
+                    <p class="subtitle">重要度・期限に基づくタスクの明確化</p>
+                </div>
+            </div>
+            <button id="btn-new-task" class="btn btn-primary">
+                <i data-lucide="plus-circle"></i> 新規タスクを追加
+            </button>
+        </header>
+
+        <!-- メインコンテンツグリッド -->
+        <main class="app-main">
+            <!-- 左カラム: ダッシュボード (タスクリスト) -->
+            <section class="dashboard-panel glass">
+                <div class="panel-header">
+                    <h2><i data-lucide="layout-dashboard"></i> ダッシュボード</h2>
+                    <span class="date-badge" id="current-today-badge">2026年5月27日</span>
+                </div>
+
+                <!-- 期限切れの未完了タスク (最優先 / 表示非表示トグル付き) -->
+                <div id="overdue-section" class="task-section overdue glass-alert hidden">
+                    <div class="section-title-wrapper">
+                        <div class="title-with-badge">
+                            <i data-lucide="alert-triangle" class="icon-alert"></i>
+                            <h3>期限切れの未完了タスク</h3>
+                            <span class="badge badge-alert" id="overdue-count">0</span>
+                        </div>
+                        <button id="btn-toggle-overdue" class="btn btn-icon-text">
+                            <i data-lucide="eye-off" id="toggle-overdue-icon"></i>
+                            <span id="toggle-overdue-text">非表示にする</span>
+                        </button>
+                    </div>
+                    <div id="overdue-list" class="task-list">
+                        <!-- 動的に挿入されます -->
+                    </div>
+                </div>
+
+                <!-- 今日のタスク -->
+                <div class="task-section">
+                    <div class="section-title-wrapper">
+                        <h3>今日までに行うこと</h3>
+                        <span class="badge badge-today" id="today-count">0</span>
+                    </div>
+                    <div id="today-list" class="task-list">
+                        <!-- 動的に挿入されます -->
+                        <div class="empty-state">
+                            <i data-lucide="check-circle-2"></i>
+                            <p>今日のタスクはありません。素晴らしい一日を！</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 期日はまだだが重要度の最も高いもの -->
+                <div class="task-section">
+                    <div class="section-title-wrapper">
+                        <h3>期日前・重要度【高】のタスク</h3>
+                        <span class="badge badge-high" id="high-priority-count">0</span>
+                    </div>
+                    <div id="high-priority-list" class="task-list">
+                        <!-- 動的に挿入されます -->
+                        <div class="empty-state">
+                            <i data-lucide="star"></i>
+                            <p>期日前の最重要タスクはありません。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 明日以降に行うこと -->
+                <div class="task-section">
+                    <div class="section-title-wrapper">
+                        <h3>明日以降に行うこと</h3>
+                        <span class="badge badge-future" id="future-count">0</span>
+                    </div>
+                    <div id="future-list" class="task-list">
+                        <!-- 動的に挿入されます -->
+                        <div class="empty-state">
+                            <i data-lucide="calendar-days"></i>
+                            <p>予定されているタスクはありません。</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 右カラム: カレンダー -->
+            <section class="calendar-panel glass">
+                <div class="panel-header">
+                    <h2><i data-lucide="calendar"></i> カレンダー</h2>
+                    <div class="calendar-controls">
+                        <!-- カレンダー表示切り替え (月/週) -->
+                        <div class="toggle-group">
+                            <button id="btn-month-view" class="btn-toggle active">月</button>
+                            <button id="btn-week-view" class="btn-toggle">週</button>
+                        </div>
+                        <!-- ナビゲーション -->
+                        <div class="nav-group">
+                            <button id="btn-prev-period" class="btn btn-icon"><i data-lucide="chevron-left"></i></button>
+                            <span id="calendar-period-label" class="period-label">2026年5月</span>
+                            <button id="btn-next-period" class="btn btn-icon"><i data-lucide="chevron-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="calendar-container">
+                    <!-- カレンダーの曜日ヘッダー -->
+                    <div class="calendar-weekdays" id="calendar-weekdays">
+                        <!-- JSで動的に構築されます -->
+                    </div>
+                    <!-- カレンダー本体グリッド -->
+                    <div class="calendar-grid" id="calendar-grid">
+                        <!-- JSで動的に構築されます -->
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- タスク追加 / 編集モーダル -->
+    <div id="task-modal" class="modal-overlay hidden">
+        <div class="modal-content glass">
+            <div class="modal-header">
+                <h2 id="modal-title"><i data-lucide="plus-circle"></i> 新規タスク追加</h2>
+                <button id="btn-close-modal" class="btn btn-icon"><i data-lucide="x"></i></button>
+            </div>
+            <form id="task-form">
+                <input type="hidden" id="task-id">
+                
+                <div class="form-group">
+                    <label for="task-name">タスク名 <span class="required">*</span></label>
+                    <input type="text" id="task-name" required placeholder="タスクの名称を入力してください">
+                </div>
+
+                <div class="form-group">
+                    <label for="task-desc">説明（詳細）</label>
+                    <textarea id="task-desc" rows="3" placeholder="タスクの詳細やメモ"></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="task-due">締め切り日 <span class="required">*</span></label>
+                        <input type="date" id="task-due" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="task-repeat">繰り返し設定</label>
+                        <select id="task-repeat">
+                            <option value="none">その日のみ</option>
+                            <option value="weekly">毎週</option>
+                            <option value="biweekly">隔週</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- その日のみ選択時のみ表示される時間設定 -->
+                <div class="form-group" id="time-settings-group">
+                    <label>時間設定</label>
+                    <div class="radio-toggle-group">
+                        <label class="radio-label">
+                            <input type="radio" name="time-type" value="allday" checked>
+                            <span>その日中 (終日)</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="time-type" value="specific">
+                            <span>時間指定</span>
+                        </label>
+                    </div>
+                    <div id="specific-time-input-wrapper" class="hidden">
+                        <input type="time" id="task-time" value="09:00">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>重要度 <span class="required">*</span></label>
+                        <div class="priority-selector">
+                            <label class="priority-option priority-low">
+                                <input type="radio" name="task-priority" value="low" checked>
+                                <span class="priority-dot"></span>
+                                <span>低</span>
+                            </label>
+                            <label class="priority-option priority-medium">
+                                <input type="radio" name="task-priority" value="medium">
+                                <span class="priority-dot"></span>
+                                <span>中</span>
+                            </label>
+                            <label class="priority-option priority-high">
+                                <input type="radio" name="task-priority" value="high">
+                                <span class="priority-dot"></span>
+                                <span>高</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group flex-align-end">
+                        <label class="checkbox-label glass-checkbox">
+                            <input type="checkbox" id="task-feedback">
+                            <span class="custom-checkbox"></span>
+                            <span><i data-lucide="message-square-text" class="inline-icon"></i> フィードバックが必要</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" id="btn-delete-task" class="btn btn-danger hidden">
+                        <i data-lucide="trash-2"></i> 削除
+                    </button>
+                    <div class="footer-right">
+                        <button type="button" id="btn-cancel" class="btn btn-secondary">キャンセル</button>
+                        <button type="submit" id="btn-save" class="btn btn-primary">保存する</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
