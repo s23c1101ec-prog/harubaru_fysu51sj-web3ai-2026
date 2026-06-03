@@ -1,41 +1,47 @@
 /* ==========================================
-   Priority Scheduler - Modern CSS Style Sheet
+   Priority Scheduler - Light White-Glass Theme
    ========================================== */
 
-/* 変数定義 / テーマカラー */
+/* 変数定義 / テーマカラー (ライトテーマ) */
 :root {
-    --bg-color: #080c14;
-    --panel-bg: rgba(17, 24, 39, 0.65);
-    --panel-border: rgba(255, 255, 255, 0.08);
-    --text-primary: #f3f4f6;
-    --text-secondary: #9ca3af;
-    --text-muted: #6b7280;
+    --bg-color: #f1f5f9;
+    --panel-bg: rgba(255, 255, 255, 0.75);
+    --panel-border: rgba(255, 255, 255, 0.6);
+    --card-bg: rgba(255, 255, 255, 0.85);
+    --card-border: rgba(255, 255, 255, 0.5);
     
-    /* 重要度別グラデーション */
-    --grad-high: linear-gradient(135deg, #ff3b30, #ff2d55, #d90429);
-    --grad-medium: linear-gradient(135deg, #ff9500, #ffcc00, #f77f00);
-    --grad-low: linear-gradient(135deg, #007aff, #34c759, #00b4d8);
-    --grad-primary: linear-gradient(135deg, #6366f1, #a855f7);
+    --text-primary: #1e293b;
+    --text-secondary: #475569;
+    --text-muted: #64748b;
+    --text-light: #94a3b8;
     
-    /* 単色フォールバック・影用 */
-    --color-high: #ff2d55;
-    --color-medium: #ff9500;
-    --color-low: #007aff;
-    --color-primary: #a855f7;
+    /* 重要度別グラデーション (ライト用に少し鮮やかに調整) */
+    --grad-high: linear-gradient(135deg, #ff4d4d, #ff2a6d);
+    --grad-medium: linear-gradient(135deg, #ff9f1c, #ffbf00);
+    --grad-low: linear-gradient(135deg, #00b4d8, #0077b6);
+    --grad-primary: linear-gradient(135deg, #6366f1, #8b5cf6);
+    --grad-event: linear-gradient(135deg, #10b981, #059669); /* 予定(Event)用はエメラルドグリーン */
+    --grad-gmail: linear-gradient(135deg, #ea4335, #c5221f); /* Gmail用 */
     
-    --shadow-soft: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-    --shadow-glow-high: 0 0 15px rgba(255, 45, 85, 0.35);
-    --shadow-glow-medium: 0 0 15px rgba(255, 149, 0, 0.3);
-    --shadow-glow-low: 0 0 15px rgba(0, 122, 255, 0.3);
+    --color-high: #ff2a6d;
+    --color-medium: #ff9f1c;
+    --color-low: #0077b6;
+    --color-event: #10b981;
+    --color-primary: #6366f1;
+    --color-gmail: #ea4335;
     
-    --border-radius-lg: 20px;
-    --border-radius-md: 12px;
-    --border-radius-sm: 8px;
+    --shadow-soft: 0 8px 30px rgba(100, 116, 139, 0.12);
+    --shadow-glow: 0 4px 20px rgba(99, 102, 241, 0.15);
+    --shadow-card: 0 4px 12px rgba(100, 116, 139, 0.06);
+    
+    --border-radius-lg: 24px;
+    --border-radius-md: 16px;
+    --border-radius-sm: 10px;
     
     --font-outfit: 'Outfit', 'Noto Sans JP', sans-serif;
 }
 
-/* 全体リセットと基本設定 */
+/* 全体リセット */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -45,38 +51,39 @@
 body {
     background-color: var(--bg-color);
     background-image: 
-        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(168, 85, 247, 0.12) 0px, transparent 50%),
-        radial-gradient(at 50% 50%, rgba(8, 12, 20, 0.8) 0px, var(--bg-color) 100%);
+        radial-gradient(at 10% 10%, rgba(99, 102, 241, 0.12) 0px, transparent 40%),
+        radial-gradient(at 90% 90%, rgba(236, 72, 153, 0.1) 0px, transparent 40%),
+        radial-gradient(at 50% 10%, rgba(16, 185, 129, 0.08) 0px, transparent 40%);
     background-attachment: fixed;
     color: var(--text-primary);
     font-family: var(--font-outfit);
     min-height: 100vh;
     padding: 24px;
-    overflow-x: hidden;
+    overflow-y: auto;
 }
 
-/* スクロールバーのカスタマイズ */
+/* スクロールバー */
 ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
 }
 ::-webkit-scrollbar-track {
-    background: rgba(8, 12, 20, 0.5);
+    background: rgba(0, 0, 0, 0.03);
+    border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(0, 0, 0, 0.12);
     border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(0, 0, 0, 0.25);
 }
 
-/* ガラスモーフィズム共通 */
+/* ガラスモーフィズム */
 .glass {
     background: var(--panel-bg);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--panel-border);
     box-shadow: var(--shadow-soft);
     border-radius: var(--border-radius-lg);
@@ -84,7 +91,7 @@ body {
 
 /* アプリコンテナ */
 .app-container {
-    max-width: 1400px;
+    max-width: 1440px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -96,12 +103,8 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 16px 24px;
-    background: rgba(15, 23, 42, 0.4);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: var(--border-radius-lg);
+    padding: 16px 28px;
+    z-index: 100;
 }
 
 .logo-area {
@@ -111,72 +114,131 @@ body {
 }
 
 .logo-icon {
-    width: 48px;
-    height: 48px;
+    width: 44px;
+    height: 44px;
     border-radius: var(--border-radius-md);
     background: var(--grad-primary);
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
 }
 
 .logo-icon i {
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
     color: #fff;
-    animation: spin-pulse 3s infinite linear;
 }
 
 .app-header h1 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    letter-spacing: -0.025em;
-    background: linear-gradient(to right, #fff, #c084fc);
+    font-size: 1.4rem;
+    font-weight: 750;
+    letter-spacing: -0.02em;
+    background: linear-gradient(to right, #4f46e5, #8b5cf6);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
 .app-header .subtitle {
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     color: var(--text-secondary);
-    margin-top: 2px;
+    margin-top: 1px;
 }
 
-/* メインコンテンツ */
+/* ナビゲーションタブ */
+.nav-tabs {
+    display: flex;
+    background: rgba(0, 0, 0, 0.04);
+    padding: 4px;
+    border-radius: 14px;
+    border: 1px solid rgba(0, 0, 0, 0.02);
+}
+
+.nav-tab {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    padding: 8px 18px;
+    font-size: 0.9rem;
+    font-family: var(--font-outfit);
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.25s ease;
+}
+
+.nav-tab i {
+    width: 16px;
+    height: 16px;
+}
+
+.nav-tab:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.4);
+}
+
+.nav-tab.active {
+    background: #fff;
+    color: var(--color-primary);
+    box-shadow: 0 4px 12px rgba(100, 116, 139, 0.1);
+}
+
+/* メイン領域 */
 .app-main {
+    position: relative;
+    min-height: 700px;
+}
+
+/* ビュー表示制御 */
+.view-container {
+    opacity: 1;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    transform: translateY(0);
+}
+
+.view-container.hidden-view {
+    display: none !important;
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+/* 今日の予定グリッド (2カラム) */
+.today-grid {
     display: grid;
-    grid-template-columns: 1fr 1.2fr;
+    grid-template-columns: 1.1fr 1fr;
     gap: 24px;
     align-items: start;
 }
 
 @media (max-width: 1024px) {
-    .app-main {
+    .today-grid {
         grid-template-columns: 1fr;
     }
 }
 
 /* パネル共通 */
-.dashboard-panel, .calendar-panel {
-    padding: 24px;
+.timeline-panel, .dashboard-panel, .calendar-panel, .settings-panel {
+    padding: 28px;
     display: flex;
     flex-direction: column;
     gap: 24px;
-    min-height: 600px;
+    min-height: 680px;
 }
 
 .panel-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     padding-bottom: 16px;
 }
 
 .panel-header h2 {
     font-size: 1.25rem;
-    font-weight: 600;
+    font-weight: 700;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -186,81 +248,185 @@ body {
     color: var(--color-primary);
 }
 
-.date-badge {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 6px 14px;
-    border-radius: var(--border-radius-sm);
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+.google-sync-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(16, 185, 129, 0.1);
+    color: #059669;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 99px;
 }
 
-/* タスクセクション */
+.google-sync-badge i {
+    width: 12px;
+    height: 12px;
+}
+
+/* タイムラインの構築 */
+.timeline-scroll-wrapper {
+    overflow-y: auto;
+    flex: 1;
+    max-height: 540px;
+    padding-right: 8px;
+}
+
+.timeline-container {
+    position: relative;
+    min-height: 1080px; /* 18時間分（1時間 = 60px） */
+    border-left: 2px solid rgba(0, 0, 0, 0.05);
+    margin-left: 60px;
+}
+
+/* 時間目盛り */
+.timeline-hour-row {
+    position: absolute;
+    left: -60px;
+    width: calc(100% + 60px);
+    height: 60px; /* 1時間 */
+    border-top: 1px dashed rgba(0, 0, 0, 0.04);
+    pointer-events: none;
+}
+
+.hour-label {
+    position: absolute;
+    top: -8px;
+    left: 0;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    width: 45px;
+    text-align: right;
+}
+
+/* タイムライン内の予定カード */
+.timeline-event-card {
+    position: absolute;
+    left: 15px;
+    width: calc(100% - 25px);
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-left: 4px solid var(--color-event);
+    border-radius: var(--border-radius-sm);
+    padding: 8px 14px;
+    box-shadow: var(--shadow-card);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.timeline-event-card:hover {
+    transform: translateX(2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border-color: rgba(16, 185, 129, 0.3);
+}
+
+.timeline-event-card.google-event {
+    border-left-color: var(--color-primary);
+    background: rgba(99, 102, 241, 0.03);
+}
+
+.timeline-event-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.timeline-event-time {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 2px;
+}
+
+/* タイムライン内のタスク目印（時間指定のある本日のタスク） */
+.timeline-task-marker {
+    position: absolute;
+    left: -6px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--color-high);
+    border: 2px solid #fff;
+    box-shadow: 0 0 8px rgba(255, 42, 109, 0.4);
+    z-index: 10;
+}
+
+.timeline-task-marker.priority-medium {
+    background: var(--color-medium);
+    box-shadow: 0 0 8px rgba(255, 159, 28, 0.4);
+}
+
+.timeline-task-marker.priority-low {
+    background: var(--color-low);
+    box-shadow: 0 0 8px rgba(0, 119, 182, 0.4);
+}
+
+/* タスクダッシュボードのカード類 */
 .task-section {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-}
-
-.section-title-wrapper {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.title-with-badge {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    gap: 10px;
 }
 
 .section-title-wrapper h3 {
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-muted);
     letter-spacing: 0.05em;
     text-transform: uppercase;
 }
 
 .badge {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     font-weight: 700;
     padding: 2px 8px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.1);
+    border-radius: 99px;
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--text-secondary);
 }
 
 .badge-alert {
-    background: rgba(239, 68, 68, 0.2);
-    color: #f87171;
-    border: 1px solid rgba(239, 68, 68, 0.3);
+    background: rgba(239, 68, 68, 0.1);
+    color: #dc2626;
+    border: 1px solid rgba(239, 68, 68, 0.15);
 }
 
 .badge-today {
-    background: rgba(99, 102, 241, 0.2);
-    color: #818cf8;
-    border: 1px solid rgba(99, 102, 241, 0.3);
+    background: rgba(99, 102, 241, 0.1);
+    color: #4f46e5;
+    border: 1px solid rgba(99, 102, 241, 0.15);
 }
 
 .badge-high {
-    background: rgba(244, 63, 94, 0.2);
-    color: #fb7185;
-    border: 1px solid rgba(244, 63, 94, 0.3);
+    background: rgba(255, 42, 109, 0.1);
+    color: #db2777;
+    border: 1px solid rgba(255, 42, 109, 0.15);
 }
 
 .badge-future {
-    background: rgba(16, 185, 129, 0.2);
-    color: #34d399;
-    border: 1px solid rgba(16, 185, 129, 0.3);
+    background: rgba(16, 185, 129, 0.1);
+    color: #059669;
+    border: 1px solid rgba(16, 185, 129, 0.15);
 }
 
-/* 警告セクション（期限切れタスク） */
+/* 期限切れ未完了セクション */
 .glass-alert {
-    background: rgba(239, 68, 68, 0.05);
-    border: 1px solid rgba(239, 68, 68, 0.2);
+    background: rgba(239, 68, 68, 0.03);
+    border: 1px solid rgba(239, 68, 68, 0.15);
     border-radius: var(--border-radius-md);
     padding: 16px;
-    animation: border-pulse 4s infinite alternate;
 }
 
 .glass-alert.hidden {
@@ -269,27 +435,26 @@ body {
 
 .icon-alert {
     color: #ef4444;
-    animation: shake 1.5s infinite ease-in-out;
 }
 
-/* タスクリスト */
+/* タスクリスト・カード */
 .task-list {
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
-/* タスクカード */
 .task-card {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
     border-radius: var(--border-radius-md);
-    padding: 14px 18px;
+    padding: 12px 18px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-card);
+    transition: all 0.2s ease;
     position: relative;
     overflow: hidden;
 }
@@ -303,42 +468,22 @@ body {
     height: 100%;
 }
 
-/* 重要度ごとの左線と影の挙動 */
-.task-card.priority-high::before {
-    background: var(--grad-high);
-}
-.task-card.priority-high:hover {
-    box-shadow: var(--shadow-glow-high);
-    border-color: rgba(255, 45, 85, 0.2);
-    background: rgba(255, 45, 85, 0.04);
-}
+.task-card.priority-high::before { background: var(--grad-high); }
+.task-card.priority-medium::before { background: var(--grad-medium); }
+.task-card.priority-low::before { background: var(--grad-low); }
 
-.task-card.priority-medium::before {
-    background: var(--grad-medium);
-}
-.task-card.priority-medium:hover {
-    box-shadow: var(--shadow-glow-medium);
-    border-color: rgba(255, 149, 0, 0.2);
-    background: rgba(255, 149, 0, 0.04);
-}
-
-.task-card.priority-low::before {
-    background: var(--grad-low);
-}
-.task-card.priority-low:hover {
-    box-shadow: var(--shadow-glow-low);
-    border-color: rgba(0, 122, 255, 0.2);
-    background: rgba(0, 122, 255, 0.04);
+/* Gmail関連タスクの左線変更 */
+.task-card.gmail-task::before {
+    background: var(--grad-gmail);
 }
 
 .task-card:hover {
-    transform: translateY(-2px);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(100, 116, 139, 0.1);
 }
 
-/* 完了タスクの表現 */
 .task-card.completed {
-    opacity: 0.45;
-    background: rgba(0, 0, 0, 0.2);
+    opacity: 0.5;
 }
 
 .task-card.completed .task-title {
@@ -353,11 +498,11 @@ body {
     flex: 1;
 }
 
-/* チェックボックスのカスタム化 */
+/* カスタムチェックボックス */
 .task-checkbox-wrapper {
     position: relative;
-    width: 22px;
-    height: 22px;
+    width: 20px;
+    height: 20px;
 }
 
 .task-checkbox {
@@ -373,29 +518,29 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-    width: 22px;
-    height: 22px;
-    border-radius: 6px;
-    border: 2px solid rgba(255, 255, 255, 0.2);
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    border: 2px solid rgba(0, 0, 0, 0.15);
     transition: all 0.2s ease;
     display: flex;
     justify-content: center;
     align-items: center;
+    background: #fff;
 }
 
 .task-checkbox:checked + .task-checkbox-custom {
     background: var(--grad-primary);
     border-color: transparent;
     color: #fff;
-    box-shadow: 0 0 8px rgba(168, 85, 247, 0.4);
 }
 
 .task-checkbox-custom i {
-    width: 14px;
-    height: 14px;
+    width: 12px;
+    height: 12px;
     opacity: 0;
     transform: scale(0.5);
-    transition: all 0.2s cubic-bezier(0.12, 0.4, 0.29, 1.46);
+    transition: all 0.2s ease;
 }
 
 .task-checkbox:checked + .task-checkbox-custom i {
@@ -406,7 +551,7 @@ body {
 .task-details {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 3px;
 }
 
 .task-title-row {
@@ -417,33 +562,49 @@ body {
 }
 
 .task-title {
-    font-size: 1rem;
-    font-weight: 550;
+    font-size: 0.92rem;
+    font-weight: 600;
     color: var(--text-primary);
 }
 
-/* フィードバック必要バッジ */
-.feedback-badge {
-    background: linear-gradient(135deg, rgba(234, 179, 8, 0.15), rgba(249, 115, 22, 0.15));
-    border: 1px solid rgba(234, 179, 8, 0.3);
-    color: #facc15;
-    font-size: 0.7rem;
-    font-weight: 600;
+/* Gmailバッジ */
+.gmail-badge {
+    background: rgba(234, 67, 53, 0.08);
+    border: 1px solid rgba(234, 67, 53, 0.2);
+    color: var(--color-gmail);
+    font-size: 0.68rem;
+    font-weight: 700;
     padding: 1px 6px;
     border-radius: 4px;
     display: inline-flex;
     align-items: center;
-    gap: 4px;
-    box-shadow: 0 0 6px rgba(234, 179, 8, 0.1);
+    gap: 3px;
+}
+.gmail-badge i {
+    width: 10px;
+    height: 10px;
 }
 
+/* フィードバック要バッジ */
+.feedback-badge {
+    background: rgba(245, 158, 11, 0.08);
+    border: 1px solid rgba(245, 158, 11, 0.25);
+    color: #d97706;
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+}
 .feedback-badge i {
     width: 10px;
     height: 10px;
 }
 
 .task-desc-sub {
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     color: var(--text-secondary);
 }
 
@@ -451,7 +612,7 @@ body {
     display: flex;
     align-items: center;
     gap: 12px;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     color: var(--text-muted);
 }
 
@@ -467,161 +628,97 @@ body {
 }
 
 .time-highlight {
-    color: #a855f7;
+    color: var(--color-primary);
     font-weight: 600;
 }
 
-/* 繰り返しマーク */
-.repeat-badge {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 1px 5px;
-    border-radius: 4px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-/* アクションボタン領域 */
+/* アクションボタン類 */
 .task-card-right {
     display: flex;
     align-items: center;
     gap: 8px;
 }
 
-/* 空状態 */
-.empty-state {
+.btn-gmail-reply {
+    background: var(--grad-gmail);
+    color: #fff;
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: 10px;
-    padding: 32px 16px;
-    border: 1px dashed rgba(255, 255, 255, 0.08);
-    border-radius: var(--border-radius-md);
-    color: var(--text-muted);
-    text-align: center;
+    gap: 4px;
+    box-shadow: 0 2px 8px rgba(234, 67, 53, 0.2);
+    transition: all 0.2s ease;
 }
-
-.empty-state i {
-    width: 32px;
-    height: 32px;
+.btn-gmail-reply:hover {
+    box-shadow: 0 4px 12px rgba(234, 67, 53, 0.35);
+    transform: translateY(-1px);
 }
-
-.empty-state p {
-    font-size: 0.85rem;
+.btn-gmail-reply i {
+    width: 12px;
+    height: 12px;
 }
 
 /* ==========================================
-   カレンダーのスタイリング
+   カレンダー (枠固定・スクロール対応)
    ========================================== */
-.calendar-controls {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
-
-.toggle-group {
-    display: flex;
-    background: rgba(255, 255, 255, 0.05);
-    padding: 2px;
-    border-radius: var(--border-radius-sm);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.btn-toggle {
-    background: transparent;
-    border: none;
-    color: var(--text-secondary);
-    padding: 4px 12px;
-    font-size: 0.85rem;
-    font-family: var(--font-outfit);
-    font-weight: 500;
-    cursor: pointer;
-    border-radius: 6px;
-    transition: all 0.2s ease;
-}
-
-.btn-toggle.active {
-    background: var(--grad-primary);
-    color: #fff;
-    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
-}
-
-.nav-group {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.period-label {
-    font-size: 0.95rem;
-    font-weight: 600;
-    min-width: 90px;
-    text-align: center;
-}
-
 .calendar-container {
     display: flex;
     flex-direction: column;
     flex: 1;
-    min-height: 480px;
 }
 
 .calendar-weekdays {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     text-align: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     padding-bottom: 8px;
     margin-bottom: 8px;
 }
 
 .calendar-weekdays span {
     font-size: 0.8rem;
-    font-weight: 600;
+    font-weight: 700;
     color: var(--text-muted);
-    text-transform: uppercase;
-}
-
-/* 土曜日と日曜日の色付け */
-.calendar-weekdays span:nth-child(6) {
-    color: #3b82f6;
-}
-.calendar-weekdays span:nth-child(7) {
-    color: #ef4444;
 }
 
 .calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    grid-auto-rows: 1fr;
-    flex: 1;
     gap: 6px;
 }
 
-/* カレンダーセル */
+/* カレンダーセル (枠固定) */
 .calendar-day {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.03);
+    background: rgba(0, 0, 0, 0.01);
+    border: 1px solid rgba(0, 0, 0, 0.03);
     border-radius: var(--border-radius-sm);
     padding: 6px;
-    min-height: 70px;
+    height: 110px; /* 高さの固定 */
     display: flex;
     flex-direction: column;
     gap: 4px;
-    transition: all 0.2s ease;
-    position: relative;
+    transition: all 0.15s ease;
+    overflow: hidden;
 }
 
 .calendar-day:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.5);
+    border-color: rgba(0, 0, 0, 0.08);
 }
 
 .calendar-day.prev-month, .calendar-day.next-month {
-    opacity: 0.25;
+    opacity: 0.35;
 }
 
 .calendar-day.today {
-    background: rgba(99, 102, 241, 0.08);
-    border-color: rgba(99, 102, 241, 0.3);
+    background: rgba(99, 102, 241, 0.05);
+    border-color: rgba(99, 102, 241, 0.25);
 }
 
 .calendar-day.today .day-number {
@@ -633,7 +730,6 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 2px 6px rgba(168, 85, 247, 0.3);
 }
 
 .day-header {
@@ -643,35 +739,35 @@ body {
 }
 
 .day-number {
-    font-size: 0.8rem;
-    font-weight: 600;
+    font-size: 0.78rem;
+    font-weight: 700;
     color: var(--text-secondary);
 }
 
-/* カレンダーの日ごとのタスクドット/バー */
+/* カレンダー内タスクコンテナ（縦スクロール対応） */
 .calendar-tasks {
     display: flex;
     flex-direction: column;
     gap: 3px;
-    overflow-y: auto;
-    max-height: 60px;
+    overflow-y: auto; /* スクロール可能に */
     flex: 1;
+    padding-right: 2px;
 }
 
-/* 週ビューにおけるセルの調整 */
-.week-view .calendar-day {
-    min-height: 380px;
+/* スクロールバー非表示、または細くする */
+.calendar-tasks::-webkit-scrollbar {
+    width: 3px;
 }
-.week-view .calendar-tasks {
-    max-height: 330px;
+.calendar-tasks::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.1);
 }
 
-/* カレンダー内タスクバー */
+/* カレンダー内アイテム */
 .cal-task-item {
     font-size: 0.65rem;
-    padding: 2px 4px;
-    border-radius: 3px;
-    font-weight: 500;
+    padding: 2px 5px;
+    border-radius: 4px;
+    font-weight: 600;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -682,14 +778,20 @@ body {
     color: #fff;
 }
 
-.cal-task-item.priority-high {
-    background: var(--grad-high);
+.cal-task-item.priority-high { background: var(--grad-high); }
+.cal-task-item.priority-medium { background: var(--grad-medium); }
+.cal-task-item.priority-low { background: var(--grad-low); }
+
+/* カレンダー内：予定用スタイル */
+.cal-task-item.event-item {
+    background: var(--grad-event);
+    border-left: 2px solid #fff;
 }
-.cal-task-item.priority-medium {
-    background: var(--grad-medium);
-}
-.cal-task-item.priority-low {
-    background: var(--grad-low);
+
+/* カレンダー内：Google予定スタイル */
+.cal-task-item.google-event-item {
+    background: var(--grad-primary);
+    border-left: 2px solid #fff;
 }
 
 .cal-task-item.completed {
@@ -697,56 +799,135 @@ body {
     text-decoration: line-through;
 }
 
-/* フィードバック必要インジケータ（星など） */
 .cal-feedback-star {
     font-size: 8px;
-    color: #facc15;
-    filter: drop-shadow(0 0 2px rgba(250, 204, 21, 0.8));
-    animation: spin-pulse 3s infinite linear;
+    color: #f59e0b;
+}
+
+/* 週表示 (週表示用の高さ調整) */
+.week-view .calendar-day {
+    height: 480px; /* 週表示は少し高さを多めに確保 */
+}
+.week-view .calendar-tasks {
+    max-height: 440px;
 }
 
 /* ==========================================
-   ボタン・UIコンポーネント
+   設定画面・その他のUI
    ========================================== */
+.settings-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.settings-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--border-radius-md);
+    padding: 24px;
+    box-shadow: var(--shadow-card);
+}
+
+.settings-card h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.settings-desc {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+    line-height: 1.4;
+}
+
+.help-text {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+    display: block;
+    line-height: 1.3;
+}
+
+.instructions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.inst-item {
+    display: flex;
+    gap: 14px;
+}
+
+.inst-item .number {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.inst-item h4 {
+    font-size: 0.88rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.inst-item p {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+/* ボタン */
 .btn {
     font-family: var(--font-outfit);
     font-size: 0.85rem;
-    font-weight: 600;
-    padding: 8px 16px;
+    font-weight: 700;
+    padding: 9px 18px;
     border-radius: var(--border-radius-sm);
     border: none;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s ease;
 }
 
 .btn-primary {
     background: var(--grad-primary);
     color: #fff;
-    box-shadow: 0 4px 14px rgba(168, 85, 247, 0.4);
+    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.25);
 }
 .btn-primary:hover {
-    box-shadow: 0 6px 20px rgba(168, 85, 247, 0.6);
+    box-shadow: 0 6px 18px rgba(99, 102, 241, 0.4);
     transform: translateY(-1px);
 }
 
 .btn-secondary {
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.05);
     color: var(--text-primary);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.02);
 }
 .btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(0, 0, 0, 0.09);
 }
 
 .btn-danger {
     background: var(--grad-high);
     color: #fff;
-}
-.btn-danger:hover {
-    box-shadow: 0 4px 14px rgba(255, 45, 85, 0.4);
 }
 
 .btn-icon {
@@ -757,13 +938,12 @@ body {
     justify-content: center;
     align-items: center;
     border-radius: var(--border-radius-sm);
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(0, 0, 0, 0.04);
     color: var(--text-secondary);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.02);
 }
 .btn-icon:hover {
-    background: rgba(255, 255, 255, 0.12);
-    color: var(--text-primary);
+    background: rgba(0, 0, 0, 0.08);
 }
 
 .btn-icon-text {
@@ -771,31 +951,23 @@ body {
     border: none;
     color: var(--text-secondary);
     cursor: pointer;
-    font-size: 0.8rem;
-    font-weight: 500;
+    font-size: 0.78rem;
+    font-weight: 600;
     display: flex;
     align-items: center;
     gap: 4px;
 }
-.btn-icon-text:hover {
-    color: var(--text-primary);
-}
-.btn-icon-text i {
-    width: 14px;
-    height: 14px;
-}
+.btn-icon-text:hover { color: var(--text-primary); }
 
-/* ==========================================
-   モーダル / フォーム
-   ========================================== */
+/* モーダル & フォーム */
 .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(5, 7, 12, 0.7);
-    backdrop-filter: blur(8px);
+    background: rgba(15, 23, 42, 0.35);
+    backdrop-filter: blur(10px);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -813,36 +985,51 @@ body {
 .modal-content {
     width: 100%;
     max-width: 580px;
-    padding: 24px;
-    animation: zoom-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    padding: 28px;
+    animation: zoom-in 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    padding-bottom: 16px;
-    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding-bottom: 14px;
 }
 
-.modal-header h2 {
-    font-size: 1.25rem;
-    font-weight: 600;
+.modal-tab-group {
     display: flex;
-    align-items: center;
-    gap: 10px;
+    background: rgba(0, 0, 0, 0.04);
+    padding: 3px;
+    border-radius: 10px;
+    margin: 18px 0;
 }
 
-.modal-header h2 i {
+.modal-tab {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    padding: 8px;
+    font-size: 0.85rem;
+    font-family: var(--font-outfit);
+    font-weight: 700;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.modal-tab.active {
+    background: #fff;
     color: var(--color-primary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .form-group {
     display: flex;
     flex-direction: column;
     gap: 6px;
-    margin-bottom: 18px;
+    margin-bottom: 16px;
 }
 
 .form-row {
@@ -858,42 +1045,38 @@ body {
 }
 
 label {
-    font-size: 0.85rem;
-    font-weight: 600;
+    font-size: 0.8rem;
+    font-weight: 700;
     color: var(--text-secondary);
 }
 
 .required {
     color: #ef4444;
-    margin-left: 2px;
 }
 
 input[type="text"], select, textarea, input[type="date"], input[type="time"] {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.06);
     border-radius: var(--border-radius-sm);
     color: var(--text-primary);
     padding: 10px 14px;
     font-family: var(--font-outfit);
-    font-size: 0.9rem;
-    transition: all 0.2s ease;
+    font-size: 0.88rem;
 }
 
 input[type="text"]:focus, select:focus, textarea:focus, input[type="date"]:focus, input[type="time"]:focus {
     outline: none;
     border-color: var(--color-primary);
-    background: rgba(255, 255, 255, 0.06);
-    box-shadow: 0 0 10px rgba(168, 85, 247, 0.25);
+    background: #fff;
+    box-shadow: 0 0 8px rgba(99, 102, 241, 0.2);
 }
 
-/* ラジオトグルグループ（時間設定） */
 .radio-toggle-group {
     display: flex;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.05);
     border-radius: var(--border-radius-sm);
     padding: 3px;
-    margin-bottom: 6px;
 }
 
 .radio-label {
@@ -913,31 +1096,22 @@ input[type="text"]:focus, select:focus, textarea:focus, input[type="date"]:focus
 .radio-label span {
     display: block;
     padding: 8px;
-    font-size: 0.85rem;
-    font-weight: 550;
+    font-size: 0.8rem;
+    font-weight: 700;
     border-radius: 6px;
     color: var(--text-secondary);
-    transition: all 0.2s ease;
 }
 
 .radio-label input:checked + span {
     background: var(--grad-primary);
     color: #fff;
-    box-shadow: 0 2px 8px rgba(168, 85, 247, 0.3);
 }
 
-#specific-time-input-wrapper {
-    margin-top: 4px;
-}
-#specific-time-input-wrapper.hidden {
-    display: none !important;
-}
-
-/* 重要度セレクター */
+/* 重要度 */
 .priority-selector {
     display: flex;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.05);
     border-radius: var(--border-radius-sm);
     padding: 3px;
 }
@@ -957,8 +1131,6 @@ input[type="text"]:focus, select:focus, textarea:focus, input[type="date"]:focus
 .priority-option input {
     position: absolute;
     opacity: 0;
-    width: 0;
-    height: 0;
 }
 
 .priority-dot {
@@ -967,75 +1139,48 @@ input[type="text"]:focus, select:focus, textarea:focus, input[type="date"]:focus
     border-radius: 50%;
 }
 
-.priority-option.priority-low .priority-dot {
-    background: #007aff;
-}
-.priority-option.priority-medium .priority-dot {
-    background: #ff9500;
-}
-.priority-option.priority-high .priority-dot {
-    background: #ff2d55;
-}
+.priority-option.priority-low .priority-dot { background: var(--color-low); }
+.priority-option.priority-medium .priority-dot { background: var(--color-medium); }
+.priority-option.priority-high .priority-dot { background: var(--color-high); }
 
 .priority-option span {
-    font-size: 0.85rem;
-    font-weight: 550;
+    font-size: 0.8rem;
+    font-weight: 700;
     color: var(--text-secondary);
 }
 
-.priority-option.priority-low input:checked + .priority-dot + span,
-.priority-option.priority-low input:checked + .priority-dot {
-    color: #fff;
-}
-.priority-option.priority-low input:checked {
-    background: var(--grad-low);
-}
-
-/* ラジオボタン選択時の背景色変更 */
 .priority-option:has(input:checked) {
-    color: #fff;
-    box-shadow: var(--shadow-soft);
+    box-shadow: var(--shadow-card);
 }
-.priority-option.priority-low:has(input:checked) {
-    background: var(--grad-low);
-}
-.priority-option.priority-medium:has(input:checked) {
-    background: var(--grad-medium);
-}
-.priority-option.priority-high:has(input:checked) {
-    background: var(--grad-high);
-}
-.priority-option:has(input:checked) span {
-    color: #fff;
-}
+.priority-option.priority-low:has(input:checked) { background: var(--grad-low); }
+.priority-option.priority-medium:has(input:checked) { background: var(--grad-medium); }
+.priority-option.priority-high:has(input:checked) { background: var(--grad-high); }
+.priority-option:has(input:checked) span { color: #fff; }
 
-/* チェックボックス（フィードバック） */
+/* チェックボックス */
 .checkbox-label {
     display: flex;
     align-items: center;
     gap: 8px;
     cursor: pointer;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
 }
 
 .checkbox-label input {
     position: absolute;
     opacity: 0;
-    width: 0;
-    height: 0;
 }
 
 .custom-checkbox {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     border-radius: 5px;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    background: rgba(255, 255, 255, 0.03);
+    border: 2px solid rgba(0, 0, 0, 0.15);
+    background: #fff;
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: all 0.2s ease;
 }
 
 .checkbox-label input:checked + .custom-checkbox {
@@ -1046,29 +1191,22 @@ input[type="text"]:focus, select:focus, textarea:focus, input[type="date"]:focus
 .checkbox-label input:checked + .custom-checkbox::after {
     content: '✓';
     color: #fff;
-    font-size: 0.8rem;
+    font-size: 0.72rem;
     font-weight: bold;
 }
 
 .flex-align-end {
     justify-content: flex-end;
-    padding-bottom: 12px;
-}
-
-.inline-icon {
-    width: 14px;
-    height: 14px;
-    vertical-align: middle;
-    margin-right: 2px;
+    padding-bottom: 10px;
 }
 
 .modal-footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
     padding-top: 20px;
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 .footer-right {
@@ -1076,42 +1214,28 @@ input[type="text"]:focus, select:focus, textarea:focus, input[type="date"]:focus
     gap: 12px;
 }
 
-/* ==========================================
-   アニメーション定義
-   ========================================== */
-@keyframes spin-pulse {
-    0% {
-        transform: rotate(0deg) scale(1);
-    }
-    50% {
-        transform: rotate(180deg) scale(1.1);
-    }
-    100% {
-        transform: rotate(360deg) scale(1);
-    }
+.hidden {
+    display: none !important;
 }
 
-@keyframes border-pulse {
-    0% {
-        border-color: rgba(239, 68, 68, 0.2);
-        box-shadow: 0 0 10px rgba(239, 68, 68, 0.05);
-    }
-    100% {
-        border-color: rgba(239, 68, 68, 0.45);
-        box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
-    }
+.mt-8 { margin-top: 8px; }
+.mt-12 { margin-top: 12px; }
+.mt-24 { margin-top: 24px; }
+.font-bold { font-weight: 700; }
+.spinning {
+    animation: spin 1.5s infinite linear;
 }
 
-@keyframes shake {
-    0%, 100% { transform: rotate(0deg); }
-    10%, 30%, 50%, 70%, 90% { transform: rotate(-5deg); }
-    20%, 40%, 60%, 80% { transform: rotate(5deg); }
+/* アニメーション */
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 
 @keyframes zoom-in {
     from {
         opacity: 0;
-        transform: scale(0.92);
+        transform: scale(0.95);
     }
     to {
         opacity: 1;

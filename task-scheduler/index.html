@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Priority Scheduler - タスク優先度・予定調整</title>
-    <!-- Google Fonts: Outfit (モダンで洗練されたフォント) -->
+    <title>Priority Scheduler - タスク＆スケジュール調整</title>
+    <!-- Google Fonts: Outfit & Noto Sans JP -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -15,214 +15,355 @@
 <body>
     <div class="app-container">
         <!-- ヘッダー -->
-        <header class="app-header">
+        <header class="app-header glass">
             <div class="logo-area">
                 <div class="logo-icon">
                     <i data-lucide="sparkles"></i>
                 </div>
                 <div>
                     <h1>Priority Scheduler</h1>
-                    <p class="subtitle">重要度・期限に基づくタスクの明確化</p>
+                    <p class="subtitle">重要度・期限・メール返信に基づくスケジュール最適化</p>
                 </div>
             </div>
-            <button id="btn-new-task" class="btn btn-primary">
-                <i data-lucide="plus-circle"></i> 新規タスクを追加
+
+            <!-- ナビゲーションタブ (SPAビュー切り替え) -->
+            <nav class="nav-tabs">
+                <button id="tab-today" class="nav-tab active">
+                    <i data-lucide="clock"></i> 本日の予定
+                </button>
+                <button id="tab-calendar" class="nav-tab">
+                    <i data-lucide="calendar"></i> カレンダー
+                </button>
+                <button id="tab-settings" class="nav-tab">
+                    <i data-lucide="settings"></i> 設定
+                </button>
+            </nav>
+
+            <button id="btn-new-item" class="btn btn-primary">
+                <i data-lucide="plus-circle"></i> 新規作成
             </button>
         </header>
 
-        <!-- メインコンテンツグリッド -->
+        <!-- メインコンテンツビュー領域 -->
         <main class="app-main">
-            <!-- 左カラム: ダッシュボード (タスクリスト) -->
-            <section class="dashboard-panel glass">
-                <div class="panel-header">
-                    <h2><i data-lucide="layout-dashboard"></i> ダッシュボード</h2>
-                    <span class="date-badge" id="current-today-badge">2026年5月27日</span>
-                </div>
-
-                <!-- 期限切れの未完了タスク (最優先 / 表示非表示トグル付き) -->
-                <div id="overdue-section" class="task-section overdue glass-alert hidden">
-                    <div class="section-title-wrapper">
-                        <div class="title-with-badge">
-                            <i data-lucide="alert-triangle" class="icon-alert"></i>
-                            <h3>期限切れの未完了タスク</h3>
-                            <span class="badge badge-alert" id="overdue-count">0</span>
+            
+            <!-- 1. 本日の予定ビュー -->
+            <div id="view-today" class="view-container">
+                <div class="today-grid">
+                    
+                    <!-- 左側: 本日のタイムライン (時間割) -->
+                    <section class="timeline-panel glass">
+                        <div class="panel-header">
+                            <h2><i data-lucide="activity"></i> 本日のスケジュール</h2>
+                            <span class="date-badge" id="timeline-date-badge">2026年6月3日</span>
                         </div>
-                        <button id="btn-toggle-overdue" class="btn btn-icon-text">
-                            <i data-lucide="eye-off" id="toggle-overdue-icon"></i>
-                            <span id="toggle-overdue-text">非表示にする</span>
-                        </button>
-                    </div>
-                    <div id="overdue-list" class="task-list">
-                        <!-- 動的に挿入されます -->
-                    </div>
-                </div>
+                        <div class="timeline-scroll-wrapper">
+                            <!-- 時間枠 (06:00 - 24:00) -->
+                            <div class="timeline-container" id="timeline-container">
+                                <!-- JSで時間グリッドおよび予定カードが動的配置されます -->
+                            </div>
+                        </div>
+                    </section>
 
-                <!-- 今日のタスク -->
-                <div class="task-section">
-                    <div class="section-title-wrapper">
-                        <h3>今日までに行うこと</h3>
-                        <span class="badge badge-today" id="today-count">0</span>
-                    </div>
-                    <div id="today-list" class="task-list">
-                        <!-- 動的に挿入されます -->
-                        <div class="empty-state">
-                            <i data-lucide="check-circle-2"></i>
-                            <p>今日のタスクはありません。素晴らしい一日を！</p>
+                    <!-- 右側: タスクダッシュボード -->
+                    <section class="dashboard-panel glass">
+                        <div class="panel-header">
+                            <h2><i data-lucide="list-todo"></i> タスク管理</h2>
+                            <div class="google-sync-badge hidden" id="google-sync-status">
+                                <i data-lucide="refresh-cw" class="spinning"></i> 同期中
+                            </div>
+                        </div>
+
+                        <!-- 期限切れの未完了タスク -->
+                        <div id="overdue-section" class="task-section overdue glass-alert hidden">
+                            <div class="section-title-wrapper">
+                                <div class="title-with-badge">
+                                    <i data-lucide="alert-triangle" class="icon-alert"></i>
+                                    <h3>期限切れの未完了タスク</h3>
+                                    <span class="badge badge-alert" id="overdue-count">0</span>
+                                </div>
+                                <button id="btn-toggle-overdue" class="btn btn-icon-text">
+                                    <i data-lucide="eye-off" id="toggle-overdue-icon"></i>
+                                    <span id="toggle-overdue-text">非表示にする</span>
+                                </button>
+                            </div>
+                            <div id="overdue-list" class="task-list">
+                                <!-- 動的挿入 -->
+                            </div>
+                        </div>
+
+                        <!-- 今日のタスク -->
+                        <div class="task-section">
+                            <div class="section-title-wrapper">
+                                <h3>今日までに行うこと</h3>
+                                <span class="badge badge-today" id="today-count">0</span>
+                            </div>
+                            <div id="today-list" class="task-list">
+                                <!-- 動的挿入 -->
+                            </div>
+                        </div>
+
+                        <!-- 期日前・重要度「高」のタスク -->
+                        <div class="task-section">
+                            <div class="section-title-wrapper">
+                                <h3>重要度【高】のタスク (期日前)</h3>
+                                <span class="badge badge-high" id="high-priority-count">0</span>
+                            </div>
+                            <div id="high-priority-list" class="task-list">
+                                <!-- 動的挿入 -->
+                            </div>
+                        </div>
+
+                        <!-- 明日以降に行うこと -->
+                        <div class="task-section">
+                            <div class="section-title-wrapper">
+                                <h3>明日以降に行うこと</h3>
+                                <span class="badge badge-future" id="future-count">0</span>
+                            </div>
+                            <div id="future-list" class="task-list">
+                                <!-- 動的挿入 -->
+                            </div>
+                        </div>
+                    </section>
+
+                </div>
+            </div>
+
+            <!-- 2. カレンダービュー -->
+            <div id="view-calendar" class="view-container hidden-view">
+                <section class="calendar-panel glass">
+                    <div class="panel-header">
+                        <h2><i data-lucide="calendar-range"></i> カレンダー</h2>
+                        <div class="calendar-controls">
+                            <!-- カレンダー表示切り替え (月/週) -->
+                            <div class="toggle-group">
+                                <button id="btn-month-view" class="btn-toggle active">月</button>
+                                <button id="btn-week-view" class="btn-toggle">週</button>
+                            </div>
+                            <!-- ナビゲーション -->
+                            <div class="nav-group">
+                                <button id="btn-prev-period" class="btn btn-icon"><i data-lucide="chevron-left"></i></button>
+                                <span id="calendar-period-label" class="period-label">2026年6月</span>
+                                <button id="btn-next-period" class="btn btn-icon"><i data-lucide="chevron-right"></i></button>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- 期日はまだだが重要度の最も高いもの -->
-                <div class="task-section">
-                    <div class="section-title-wrapper">
-                        <h3>期日前・重要度【高】のタスク</h3>
-                        <span class="badge badge-high" id="high-priority-count">0</span>
-                    </div>
-                    <div id="high-priority-list" class="task-list">
-                        <!-- 動的に挿入されます -->
-                        <div class="empty-state">
-                            <i data-lucide="star"></i>
-                            <p>期日前の最重要タスクはありません。</p>
+                    <div class="calendar-container">
+                        <!-- カレンダー曜日ヘッダー -->
+                        <div class="calendar-weekdays" id="calendar-weekdays">
+                            <!-- 動的構築 -->
+                        </div>
+                        <!-- カレンダーグリッド (高さ固定・スクロール対応) -->
+                        <div class="calendar-grid" id="calendar-grid">
+                            <!-- 動的構築 -->
                         </div>
                     </div>
-                </div>
+                </section>
+            </div>
 
-                <!-- 明日以降に行うこと -->
-                <div class="task-section">
-                    <div class="section-title-wrapper">
-                        <h3>明日以降に行うこと</h3>
-                        <span class="badge badge-future" id="future-count">0</span>
+            <!-- 3. 設定ビュー -->
+            <div id="view-settings" class="view-container hidden-view">
+                <section class="settings-panel glass">
+                    <div class="panel-header">
+                        <h2><i data-lucide="sliders"></i> 連携および各種設定</h2>
                     </div>
-                    <div id="future-list" class="task-list">
-                        <!-- 動的に挿入されます -->
-                        <div class="empty-state">
-                            <i data-lucide="calendar-days"></i>
-                            <p>予定されているタスクはありません。</p>
+
+                    <div class="settings-content">
+                        <!-- Google連携設定カード -->
+                        <div class="settings-card">
+                            <h3><i data-lucide="chrome"></i> Google API 連携設定</h3>
+                            <p class="settings-desc">GoogleカレンダーおよびGmailと接続するためのAPI情報を設定します。情報はご自身のブラウザ内にのみ安全に保存されます。</p>
+                            
+                            <form id="google-settings-form">
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="setting-demo-mode" checked>
+                                        <span class="custom-checkbox"></span>
+                                        <span class="font-bold">Google APIデモ(シミュレーション)モードを使用する</span>
+                                    </label>
+                                    <span class="help-text">有効にすると、ClientIDを入力しなくてもデモ用のGoogleカレンダーの予定や返信が必要なGmailタスクが自動生成されて動作をテストできます。</span>
+                                </div>
+
+                                <div id="google-credentials-inputs" class="hidden">
+                                    <div class="form-group">
+                                        <label for="google-client-id">Google API Client ID</label>
+                                        <input type="text" id="google-client-id" placeholder="xxxxxxxxxx.apps.googleusercontent.com">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="google-api-key">Google API Key</label>
+                                        <input type="text" id="google-api-key" placeholder="AIzaSy...">
+                                    </div>
+                                    <button type="button" id="btn-google-auth" class="btn btn-secondary">
+                                        <i data-lucide="log-in"></i> Google アカウントと連携する
+                                    </button>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary mt-12">設定を保存する</button>
+                            </form>
+                        </div>
+
+                        <!-- 使い方カード -->
+                        <div class="settings-card mt-24">
+                            <h3><i data-lucide="help-circle"></i> このアプリの使い方</h3>
+                            <div class="instructions-list">
+                                <div class="inst-item">
+                                    <span class="number">1</span>
+                                    <div>
+                                        <h4>予定とタスクの使い分け</h4>
+                                        <p><strong>「予定」</strong>は会議や面談など特定の時間枠を占有するもの（今日のタイムラインおよびカレンダーに配置）。<strong>「タスク」</strong>は重要度や期日、返信要否に基づいて優先度が決まるやるべきことです。</p>
+                                    </div>
+                                </div>
+                                <div class="inst-item">
+                                    <span class="number">2</span>
+                                    <div>
+                                        <h4>Gmail連携と返信処理</h4>
+                                        <p>フィードバックが必要なタスクやGmailから同期されたメールタスクには、カードに「返信する」ボタンが自動で表示されます。ボタンを押すと件名と宛先が入ったGmail送信画面が直接開き、作業をシームレスに行えます。</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            </div>
 
-            <!-- 右カラム: カレンダー -->
-            <section class="calendar-panel glass">
-                <div class="panel-header">
-                    <h2><i data-lucide="calendar"></i> カレンダー</h2>
-                    <div class="calendar-controls">
-                        <!-- カレンダー表示切り替え (月/週) -->
-                        <div class="toggle-group">
-                            <button id="btn-month-view" class="btn-toggle active">月</button>
-                            <button id="btn-week-view" class="btn-toggle">週</button>
-                        </div>
-                        <!-- ナビゲーション -->
-                        <div class="nav-group">
-                            <button id="btn-prev-period" class="btn btn-icon"><i data-lucide="chevron-left"></i></button>
-                            <span id="calendar-period-label" class="period-label">2026年5月</span>
-                            <button id="btn-next-period" class="btn btn-icon"><i data-lucide="chevron-right"></i></button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="calendar-container">
-                    <!-- カレンダーの曜日ヘッダー -->
-                    <div class="calendar-weekdays" id="calendar-weekdays">
-                        <!-- JSで動的に構築されます -->
-                    </div>
-                    <!-- カレンダー本体グリッド -->
-                    <div class="calendar-grid" id="calendar-grid">
-                        <!-- JSで動的に構築されます -->
-                    </div>
-                </div>
-            </section>
         </main>
     </div>
 
-    <!-- タスク追加 / 編集モーダル -->
-    <div id="task-modal" class="modal-overlay hidden">
+    <!-- モーダルフォーム (予定・タスク新規作成 / 編集) -->
+    <div id="item-modal" class="modal-overlay hidden">
         <div class="modal-content glass">
             <div class="modal-header">
-                <h2 id="modal-title"><i data-lucide="plus-circle"></i> 新規タスク追加</h2>
+                <h2 id="modal-title"><i data-lucide="plus-circle"></i> 新規アイテム作成</h2>
                 <button id="btn-close-modal" class="btn btn-icon"><i data-lucide="x"></i></button>
             </div>
-            <form id="task-form">
-                <input type="hidden" id="task-id">
+            
+            <!-- アイテム種別切り替えタブ -->
+            <div class="modal-tab-group">
+                <button type="button" id="modal-tab-task" class="modal-tab active">タスクを登録</button>
+                <button type="button" id="modal-tab-event" class="modal-tab">予定を登録</button>
+            </div>
+
+            <form id="item-form">
+                <!-- 共通項目 -->
+                <input type="hidden" id="item-id">
+                <input type="hidden" id="item-type" value="task"> <!-- 'task' または 'event' -->
                 
                 <div class="form-group">
-                    <label for="task-name">タスク名 <span class="required">*</span></label>
-                    <input type="text" id="task-name" required placeholder="タスクの名称を入力してください">
+                    <label for="item-title">タイトル <span class="required">*</span></label>
+                    <input type="text" id="item-title" required placeholder="名称を入力してください">
                 </div>
 
                 <div class="form-group">
-                    <label for="task-desc">説明（詳細）</label>
-                    <textarea id="task-desc" rows="3" placeholder="タスクの詳細やメモ"></textarea>
+                    <label for="item-desc">説明（詳細）</label>
+                    <textarea id="item-desc" rows="3" placeholder="詳細やメモを入力してください"></textarea>
                 </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="task-due">締め切り日 <span class="required">*</span></label>
-                        <input type="date" id="task-due" required>
+                <!-- A. タスク用の設定項目 -->
+                <div id="fields-task">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="task-due">締め切り日 <span class="required">*</span></label>
+                            <input type="date" id="task-due">
+                        </div>
+                        <div class="form-group">
+                            <label for="task-repeat">繰り返し設定</label>
+                            <select id="task-repeat">
+                                <option value="none">その日のみ</option>
+                                <option value="weekly">毎週</option>
+                                <option value="biweekly">隔週</option>
+                            </select>
+                        </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="task-repeat">繰り返し設定</label>
-                        <select id="task-repeat">
-                            <option value="none">その日のみ</option>
-                            <option value="weekly">毎週</option>
-                            <option value="biweekly">隔週</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- その日のみ選択時のみ表示される時間設定 -->
-                <div class="form-group" id="time-settings-group">
-                    <label>時間設定</label>
-                    <div class="radio-toggle-group">
-                        <label class="radio-label">
-                            <input type="radio" name="time-type" value="allday" checked>
-                            <span>その日中 (終日)</span>
-                        </label>
-                        <label class="radio-label">
-                            <input type="radio" name="time-type" value="specific">
-                            <span>時間指定</span>
-                        </label>
-                    </div>
-                    <div id="specific-time-input-wrapper" class="hidden">
-                        <input type="time" id="task-time" value="09:00">
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>重要度 <span class="required">*</span></label>
-                        <div class="priority-selector">
-                            <label class="priority-option priority-low">
-                                <input type="radio" name="task-priority" value="low" checked>
-                                <span class="priority-dot"></span>
-                                <span>低</span>
+                    <!-- 単発時のみ表示される時間設定 -->
+                    <div class="form-group" id="time-settings-group">
+                        <label>時間設定</label>
+                        <div class="radio-toggle-group">
+                            <label class="radio-label">
+                                <input type="radio" name="time-type" value="allday" checked>
+                                <span>その日中 (終日)</span>
                             </label>
-                            <label class="priority-option priority-medium">
-                                <input type="radio" name="task-priority" value="medium">
-                                <span class="priority-dot"></span>
-                                <span>中</span>
+                            <label class="radio-label">
+                                <input type="radio" name="time-type" value="specific">
+                                <span>時間指定</span>
                             </label>
-                            <label class="priority-option priority-high">
-                                <input type="radio" name="task-priority" value="high">
-                                <span class="priority-dot"></span>
-                                <span>高</span>
+                        </div>
+                        <div id="specific-time-input-wrapper" class="hidden">
+                            <input type="time" id="task-time" value="09:00">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>重要度 <span class="required">*</span></label>
+                            <div class="priority-selector">
+                                <label class="priority-option priority-low">
+                                    <input type="radio" name="task-priority" value="low" checked>
+                                    <span class="priority-dot"></span>
+                                    <span>低</span>
+                                </label>
+                                <label class="priority-option priority-medium">
+                                    <input type="radio" name="task-priority" value="medium">
+                                    <span class="priority-dot"></span>
+                                    <span>中</span>
+                                </label>
+                                <label class="priority-option priority-high">
+                                    <input type="radio" name="task-priority" value="high">
+                                    <span class="priority-dot"></span>
+                                    <span>高</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group flex-align-end">
+                            <label class="checkbox-label glass-checkbox">
+                                <input type="checkbox" id="task-feedback">
+                                <span class="custom-checkbox"></span>
+                                <span><i data-lucide="message-square-text" class="inline-icon"></i> フィードバック要 (返信要)</span>
                             </label>
                         </div>
                     </div>
 
-                    <div class="form-group flex-align-end">
-                        <label class="checkbox-label glass-checkbox">
-                            <input type="checkbox" id="task-feedback">
-                            <span class="custom-checkbox"></span>
-                            <span><i data-lucide="message-square-text" class="inline-icon"></i> フィードバックが必要</span>
-                        </label>
+                    <!-- タスクとGmailの紐付け（任意設定） -->
+                    <div class="form-group" id="gmail-association-group">
+                        <label for="task-email-to">関連する返信先メールアドレス（任意）</label>
+                        <input type="text" id="task-email-to" placeholder="example@example.com">
                     </div>
                 </div>
 
+                <!-- B. 予定用の設定項目 -->
+                <div id="fields-event" class="hidden">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="event-date">日付 <span class="required">*</span></label>
+                            <input type="date" id="event-date">
+                        </div>
+                        <div class="form-group">
+                            <label for="event-sync-google">Google連携</label>
+                            <label class="checkbox-label mt-8">
+                                <input type="checkbox" id="event-sync-google" checked>
+                                <span class="custom-checkbox"></span>
+                                <span>Googleカレンダーに同期</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="event-start-time">開始時刻 <span class="required">*</span></label>
+                            <input type="time" id="event-start-time" value="10:00">
+                        </div>
+                        <div class="form-group">
+                            <label for="event-end-time">終了時刻 <span class="required">*</span></label>
+                            <input type="time" id="event-end-time" value="11:00">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- モーダルフッター -->
                 <div class="modal-footer">
-                    <button type="button" id="btn-delete-task" class="btn btn-danger hidden">
+                    <button type="button" id="btn-delete-item" class="btn btn-danger hidden">
                         <i data-lucide="trash-2"></i> 削除
                     </button>
                     <div class="footer-right">
@@ -234,6 +375,9 @@
         </div>
     </div>
 
+    <!-- Google API Client Libraries (GIS) -->
+    <script async defer src="https://apis.google.com/js/api.js"></script>
+    <script async defer src="https://accounts.google.com/gsi/client"></script>
     <script src="app.js"></script>
 </body>
 </html>
