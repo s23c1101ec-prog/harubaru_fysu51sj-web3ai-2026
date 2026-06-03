@@ -176,16 +176,7 @@
                             <p class="settings-desc">GoogleカレンダーおよびGmailと接続するためのAPI情報を設定します。情報はご自身のブラウザ内にのみ安全に保存されます。</p>
                             
                             <form id="google-settings-form">
-                                <div class="form-group">
-                                    <label class="checkbox-label">
-                                        <input type="checkbox" id="setting-demo-mode" checked>
-                                        <span class="custom-checkbox"></span>
-                                        <span class="font-bold">Google APIデモ(シミュレーション)モードを使用する</span>
-                                    </label>
-                                    <span class="help-text">有効にすると、ClientIDを入力しなくてもデモ用のGoogleカレンダーの予定や返信が必要なGmailタスクが自動生成されて動作をテストできます。</span>
-                                </div>
-
-                                <div id="google-credentials-inputs" class="hidden">
+                                <div id="google-credentials-inputs">
                                     <div class="form-group">
                                         <label for="google-client-id">Google API Client ID</label>
                                         <input type="text" id="google-client-id" placeholder="xxxxxxxxxx.apps.googleusercontent.com">

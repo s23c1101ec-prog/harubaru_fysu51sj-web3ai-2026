@@ -12,7 +12,6 @@ let overdueVisible = true; // 期限切れ未完了エリアの表示状態
 
 // Google API 設定情報
 let googleConfig = {
-    demoMode: true,
     clientId: '',
     apiKey: '',
     accessToken: null
@@ -99,72 +98,11 @@ const elements = {
 
     // 設定画面
     googleSettingsForm: document.getElementById('google-settings-form'),
-    settingDemoMode: document.getElementById('setting-demo-mode'),
     googleCredentialsInputs: document.getElementById('google-credentials-inputs'),
     googleClientId: document.getElementById('google-client-id'),
     googleApiKey: document.getElementById('google-api-key'),
     btnGoogleAuth: document.getElementById('btn-google-auth')
 };
-
-// デモ用のGoogle APIから取得するデータ定義
-const DEMO_GOOGLE_EVENTS = [
-    {
-        id: 'google-demo-1',
-        type: 'event',
-        title: '💼 Web3・AI概論 第5回講義',
-        description: '千葉工業大学 総合科学特論。遅れないように参加すること。',
-        startDate: '', // 動的に今日の日付をセット
-        startTime: '13:00',
-        endDate: '',
-        endTime: '14:30',
-        isGoogleEvent: true
-    },
-    {
-        id: 'google-demo-2',
-        type: 'event',
-        title: '👥 ゼミナール進捗報告会',
-        description: '資料の準備をして発表する。',
-        startDate: '',
-        startTime: '16:00',
-        endDate: '',
-        endTime: '17:00',
-        isGoogleEvent: true
-    }
-];
-
-const DEMO_GOOGLE_GMAILS = [
-    {
-        id: 'gmail-demo-1',
-        type: 'task',
-        title: '✉️ 【要返信】レポート再提出の件（齊藤教授より）',
-        description: '課題3の記載に一部修正が必要です。本日中に返信してください。',
-        dueDate: '', // 今日
-        repeat: 'none',
-        timeType: 'specific',
-        time: '11:00',
-        priority: 'high',
-        feedbackRequired: true,
-        completedDates: [],
-        emailTo: 'saito-prof@cit-web3ai.ac.jp',
-        emailSubject: 'Re: レポート再提出の件',
-        isGmailTask: true
-    },
-    {
-        id: 'gmail-demo-2',
-        type: 'task',
-        title: '✉️ 【確認】Discordグループへの招待リンクについて（運営）',
-        description: '招待リンクの有効期限が切れています。再発行の依頼を行ってください。',
-        dueDate: '', // 今日
-        repeat: 'none',
-        timeType: 'allday',
-        priority: 'medium',
-        feedbackRequired: true,
-        completedDates: [],
-        emailTo: 'support-web3ai@cit-web3ai.ac.jp',
-        emailSubject: 'Discord招待リンクの再発行依頼',
-        isGmailTask: true
-    }
-];
 
 // 起動処理
 document.addEventListener('DOMContentLoaded', () => {
@@ -176,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
     lucide.createIcons();
     
     // Google API クライアント初期化準備
-    if (!googleConfig.demoMode && googleConfig.clientId) {
+    if (googleConfig.clientId) {
         initGoogleApi();
     }
 });
@@ -236,15 +174,8 @@ function loadData() {
     }
     
     // UIへの設定値反映
-    elements.settingDemoMode.checked = googleConfig.demoMode;
     elements.googleClientId.value = googleConfig.clientId || '';
     elements.googleApiKey.value = googleConfig.apiKey || '';
-    
-    if (googleConfig.demoMode) {
-        elements.googleCredentialsInputs.classList.add('hidden');
-    } else {
-        elements.googleCredentialsInputs.classList.remove('hidden');
-    }
 
     // 表示トグルのロード
     const storedOverdueVisible = localStorage.getItem(OVERDUE_VISIBLE_KEY);
@@ -306,31 +237,7 @@ function setupNavigation() {
 
 // 表示用のアイテム（手動登録＋Googleデモ同期分）を一括取得する関数
 function getAllDisplayItems() {
-    let all = [...items];
-    const today = getTodayString();
-
-    if (googleConfig.demoMode) {
-        // デモ用のGoogleカレンダーの予定を今日の日付で動的生成
-        DEMO_GOOGLE_EVENTS.forEach(evt => {
-            all.push({
-                ...evt,
-                startDate: today,
-                endDate: today
-            });
-        });
-
-        // デモ用のGmail返信要メールタスクを今日の日付で動的生成
-        DEMO_GOOGLE_GMAILS.forEach(gmail => {
-            // LocalStorageに同名のタスクが存在しない場合のみ追加
-            if (!items.some(t => t.id === gmail.id)) {
-                all.push({
-                    ...gmail,
-                    dueDate: today
-                });
-            }
-        });
-    }
-    return all;
+    return [...items];
 }
 
 // Google APIsの認証と初期化 (実際の設定がされている場合)
@@ -1173,24 +1080,13 @@ function setupEventListeners() {
         renderCalendar();
     });
 
-    // 設定画面のデモモードトグル
-    elements.settingDemoMode.addEventListener('change', (e) => {
-        if (e.target.checked) {
-            elements.googleCredentialsInputs.classList.add('hidden');
-        } else {
-            elements.googleCredentialsInputs.classList.remove('hidden');
-        }
-    });
-
     // 設定保存
     elements.googleSettingsForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        googleConfig.demoMode = elements.settingDemoMode.checked;
         googleConfig.clientId = elements.googleClientId.value.trim();
         googleConfig.apiKey = elements.googleApiKey.value.trim();
         
         localStorage.setItem(GOOGLE_CONFIG_KEY, JSON.stringify({
-            demoMode: googleConfig.demoMode,
             clientId: googleConfig.clientId,
             apiKey: googleConfig.apiKey
         }));
